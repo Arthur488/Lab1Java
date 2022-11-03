@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="plugins">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/plugins/minusoperations.jar!/" />
+      <root url="jar://$PROJECT_DIR$/plugins/sqrtoperation.jar!/" />
+      <root url="jar://$PROJECT_DIR$/plugins/Lab1JavaPluginPlus.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
