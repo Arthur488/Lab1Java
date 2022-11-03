@@ -51,20 +51,28 @@ public class CoreCalculator  {
                 for (String operation : pluginClasses.keySet()) {
 
                     if (input.contains(operation)) {
-                        Pattern pattern = Pattern.compile("(\\d+)(.)(\\d+)");
+                        //Pattern pattern = Pattern.compile("(\\d+)(.)(\\d+)");
+                        Pattern pattern = Pattern.compile("([A-z]+) (\\d+)");
                         Matcher matcher = pattern.matcher(input);
 
                         if (matcher.find()) {
                             isMatchToOperation = true;
-                            String firstParameter = matcher.group(1);
-                            String operator = matcher.group(2);
-                            String secondParameter = matcher.group(3);
+                            //String firstParameter = matcher.group(1);
+                            //String operator = matcher.group(2);
+                            //String secondParameter = matcher.group(3);
 
-                            Class<?>[] methodParameterTypes = new Class<?>[] {double.class, double.class };
-                            Object[] methodArgument = new Object[] { Double.valueOf(firstParameter), Double.valueOf(secondParameter) };
-                            Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateBinary", methodParameterTypes, methodArgument);
+                            String operator = matcher.group(1);
+                            String firstParameter = matcher.group(2);
 
-                            System.out.println("The result of opereation " + result);
+                            //Class<?>[] methodParameterTypes = new Class<?>[] {double.class, double.class };
+                            Class<?>[] methodParameterTypes = new Class<?>[] {double.class};
+                            //Object[] methodArgument = new Object[] { Double.valueOf(firstParameter), Double.valueOf(secondParameter) };
+                            Object[] methodArgument = new Object[] { Double.valueOf(firstParameter) };
+
+                            //Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateBinary", methodParameterTypes, methodArgument);
+                            Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateUnary", methodParameterTypes, methodArgument);
+
+                            System.out.println("The result of opereation: " + input + " = " + result);
                         }
                     }
                 }
@@ -85,7 +93,7 @@ public class CoreCalculator  {
                 return pathname.isFile() && pathname.getName().endsWith(JAR_EXTENTION);
             }
         });
-        System.out.println("jars: " + Arrays.toString(jars));
+        //System.out.println("jars: " + Arrays.toString(jars));
         return jars;
     }
 
@@ -150,9 +158,9 @@ public class CoreCalculator  {
 
 
                 Class<?> pluginClass = Class.forName(className, false, pluginClassloader);
-                System.out.println("pluginClass" + pluginClass);
+
                 boolean isPlugin = isPluginClass(pluginClass);
-                System.out.println(isPlugin);
+
                 if (isPlugin && operationType != null && operator != null
                         && description != null) {
                     executeMethod(pluginClass, "invoke", new Class<?>[] {},
@@ -184,7 +192,7 @@ public class CoreCalculator  {
                 ex.printStackTrace();
             }
         }
-        System.out.println(pluginClasses);
+
         return pluginClasses;
     }
 
