@@ -3,7 +3,7 @@ package uacnstupluginminusoperation;
 import uacnstupluginapi.BinaryOperator;
 import uacnstupluginapi.Plugin;
 
-public class MinusPlugin implements Plugin, BinaryOperator {
+/*public class MinusPlugin implements Plugin, BinaryOperator {
 
     public static void main(String[] args) {
 
@@ -19,3 +19,4 @@ public class MinusPlugin implements Plugin, BinaryOperator {
         return firstOperand - secondOpearnd;
     }
 }
+*/

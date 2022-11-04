@@ -31,7 +31,7 @@ public class CoreCalculator  {
             InvocationTargetException {
 
         File[] jars = getAllJarsFromPluginDir();
-
+        System.out.println("JARS: " + Arrays.toString(jars));
        Map<String, PluginInfo> pluginClasses = loadPlugins(jars);
 
 
@@ -52,25 +52,29 @@ public class CoreCalculator  {
 
                     if (input.contains(operation)) {
                         //Pattern pattern = Pattern.compile("(\\d+)(.)(\\d+)");
-                        Pattern pattern = Pattern.compile("([A-z]+) (\\d+)");
+                        //Pattern pattern = Pattern.compile("([A-z]+) (\\d+)");
+                        Pattern pattern = Pattern.compile("(\\d+) (\\+) (\\d+) (\\+) (\\d+)");
                         Matcher matcher = pattern.matcher(input);
 
                         if (matcher.find()) {
                             isMatchToOperation = true;
-                            //String firstParameter = matcher.group(1);
-                            //String operator = matcher.group(2);
-                            //String secondParameter = matcher.group(3);
+                            String firstNumber = matcher.group(1);
+                            String operator = matcher.group(2);
+                            String secondNumber = matcher.group(3);
+                            String operator2 = matcher.group(4);
+                            String thirdNumber = matcher.group(5);
 
-                            String operator = matcher.group(1);
-                            String firstParameter = matcher.group(2);
+//                            String operator = matcher.group(1);
+//                            String firstParameter = matcher.group(2);
 
                             //Class<?>[] methodParameterTypes = new Class<?>[] {double.class, double.class };
-                            Class<?>[] methodParameterTypes = new Class<?>[] {double.class};
+                            Class<?>[] methodParameterTypes = new Class<?>[] {double.class, double.class, double.class};
                             //Object[] methodArgument = new Object[] { Double.valueOf(firstParameter), Double.valueOf(secondParameter) };
-                            Object[] methodArgument = new Object[] { Double.valueOf(firstParameter) };
+                            Object[] methodArgument = new Object[] { Double.valueOf(firstNumber), Double.valueOf(secondNumber), Double.valueOf(thirdNumber) };
 
                             //Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateBinary", methodParameterTypes, methodArgument);
-                            Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateUnary", methodParameterTypes, methodArgument);
+                            //Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateUnary", methodParameterTypes, methodArgument);
+                            Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateBinary", methodParameterTypes, methodArgument);
 
                             System.out.println("The result of opereation: " + input + " = " + result);
                         }
@@ -184,7 +188,6 @@ public class CoreCalculator  {
                 System.out.println("WE HAVE A PROBLEM!");
             }
         }
-
         return pluginClasses;
     }
 
