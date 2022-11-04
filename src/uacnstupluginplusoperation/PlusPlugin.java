@@ -20,3 +20,11 @@ public class PlusPlugin implements Plugin, BinaryOperator {
     }
 }
 */
+
+public class PlusPlugin{
+
+    public static void main(String[] args) {
+
+    }
+
+}

@@ -18,7 +18,9 @@ public class ThreePlugin implements BinaryOperator, Plugin {
 
     @Override
     public double calculateBinary(double firstOperand, double secondOperand, double thirdOperand) {
-        return firstOperand + secondOperand + thirdOperand;
+        double res = firstOperand + secondOperand + thirdOperand;
+
+        return res;
     }
 
 

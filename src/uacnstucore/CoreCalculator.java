@@ -61,7 +61,6 @@ public class CoreCalculator  {
                             String firstNumber = matcher.group(1);
                             String operator = matcher.group(2);
                             String secondNumber = matcher.group(3);
-                            String operator2 = matcher.group(4);
                             String thirdNumber = matcher.group(5);
 
 //                            String operator = matcher.group(1);
