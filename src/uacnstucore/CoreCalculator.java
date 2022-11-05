@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class CoreCalculator  {
             InvocationTargetException {
 
         File[] jars = getAllJarsFromPluginDir();
-        System.out.println("JARS: " + Arrays.toString(jars));
+
        Map<String, PluginInfo> pluginClasses = loadPlugins(jars);
 
 
@@ -51,36 +52,35 @@ public class CoreCalculator  {
                 for (String operation : pluginClasses.keySet()) {
 
                     if (input.contains(operation)) {
-                        //Pattern pattern = Pattern.compile("(\\d+)(.)(\\d+)");
-                        //Pattern pattern = Pattern.compile("([A-z]+) (\\d+)");
-                        Pattern pattern = Pattern.compile("(\\d+) (\\+) (\\d+) (\\+) (\\d+)");
+                        Pattern pattern = Pattern.compile("(\\w+) (\\d+)");
+                        Pattern patternForBinary = Pattern.compile("(\\w+) (.) (\\d+)");
                         Matcher matcher = pattern.matcher(input);
+                        Matcher matcherForBinary = patternForBinary.matcher(input);
 
+                        if(matcherForBinary.find()){
+                            isMatchToOperation = true;
+                            String firstParameterForBinary = matcherForBinary.group(1);
+                            String operatorForBinary = matcherForBinary.group(2);
+                            String secondParameterForBinary = matcherForBinary.group(3);
+                            Class<?>[] methodParameterTypesForBinary = new Class<?>[] {double.class, double.class};
+                            Object[] methodArgumentForBinary = new Object[] { Double.valueOf(firstParameterForBinary), Double.valueOf(secondParameterForBinary) };
+                            Double result = (Double) executeMethod(pluginClasses.get(operatorForBinary).getClassReference(),"calculateBinary", methodParameterTypesForBinary, methodArgumentForBinary);
+                            System.out.println("The result of opereation: " + input + " = " + result);
+                        }
                         if (matcher.find()) {
                             isMatchToOperation = true;
-                            String firstNumber = matcher.group(1);
-                            String operator = matcher.group(2);
-                            String secondNumber = matcher.group(3);
-                            String thirdNumber = matcher.group(5);
-
-//                            String operator = matcher.group(1);
-//                            String firstParameter = matcher.group(2);
-
-                            //Class<?>[] methodParameterTypes = new Class<?>[] {double.class, double.class };
-                            Class<?>[] methodParameterTypes = new Class<?>[] {double.class, double.class, double.class};
-                            //Object[] methodArgument = new Object[] { Double.valueOf(firstParameter), Double.valueOf(secondParameter) };
-                            Object[] methodArgument = new Object[] { Double.valueOf(firstNumber), Double.valueOf(secondNumber), Double.valueOf(thirdNumber) };
-
-                            //Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateBinary", methodParameterTypes, methodArgument);
-                            //Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateUnary", methodParameterTypes, methodArgument);
-                            Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateBinary", methodParameterTypes, methodArgument);
-
-                            System.out.println("The result of opereation: " + input + " = " + result);
+                            String operator = matcher.group(1);
+                            String firstParameter = matcher.group(2);
+                            Class<?>[] methodParameterTypes = new Class<?>[] {double.class};
+                            Object[] methodArgument = new Object[] { Double.valueOf(firstParameter) };
+                            Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateUnary", methodParameterTypes, methodArgument);
+                            String formattedResult = new DecimalFormat("#0.0000").format(result);
+                            System.out.println("The result of opereation: " + input + " = " + formattedResult);
                         }
                     }
                 }
                 if (!isMatchToOperation) {
-                    System.out.println("Operatio is not supported");
+                    System.out.println("Operation is not supported");
                 }
             }
         }
@@ -113,8 +113,7 @@ public class CoreCalculator  {
         boolean isPlugin = false;
         Class<?>[] implementedInterfaces = pluginClass.getInterfaces();
         for (Class<?> implementedInterface : implementedInterfaces) {
-            if ("uacnstupluginapi.Plugin"
-                    .equalsIgnoreCase(implementedInterface.getName())) {
+            if ("uacnstupluginapi.Plugin".equalsIgnoreCase(implementedInterface.getName())) {
                 isPlugin = true;
                 continue;
             }

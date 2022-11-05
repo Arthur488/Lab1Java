@@ -2,7 +2,7 @@ package uacnstupluginplusoperation;
 
 import uacnstupluginapi.BinaryOperator;
 import uacnstupluginapi.Plugin;
-/*
+
 public class PlusPlugin implements Plugin, BinaryOperator {
 
     public static void main(String[] args) {
@@ -19,12 +19,4 @@ public class PlusPlugin implements Plugin, BinaryOperator {
         return firstOperand + secondOpearnd;
     }
 }
-*/
 
-public class PlusPlugin{
-
-    public static void main(String[] args) {
-
-    }
-
-}
