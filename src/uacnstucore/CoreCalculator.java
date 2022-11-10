@@ -53,13 +53,9 @@ public class CoreCalculator  {
 
                     if (input.contains(operation)) {
                         Pattern pattern = Pattern.compile("(\\w+) (\\d+)");
-                        Pattern patternForBinary = Pattern.compile("(\\d+) (.|\\w+) (\\d+)");
-                        Pattern patternForAscii = Pattern.compile("(.) (.) (.)");
-
+                        Pattern patternForBinary = Pattern.compile("(\\d+) (.) (\\d+)");
                         Matcher matcher = pattern.matcher(input);
                         Matcher matcherForBinary = patternForBinary.matcher(input);
-                        Matcher matcherForAscii = patternForAscii.matcher(input);
-//t + h додати ASCI codsint a = 1;
 
                         if(matcherForBinary.find()){
                             isMatchToOperation = true;
@@ -80,20 +76,6 @@ public class CoreCalculator  {
                             Double result = (Double) executeMethod(pluginClasses.get(operator).getClassReference(),"calculateUnary", methodParameterTypes, methodArgument);
                             String formattedResult = new DecimalFormat("#0.0000").format(result);
                             System.out.println("The result of opereation: " + input + " = " + formattedResult);
-                        }
-                        else if (matcherForAscii.find()) {
-                            isMatchToOperation = true;
-                            String firstParameter = matcherForAscii.group(1);
-                            char char1 = firstParameter.charAt(0);
-                            String operator2 = matcherForAscii.group(2);
-                            String SecondParameter = matcherForAscii.group(3);
-                            char char2 = SecondParameter.charAt(0);
-
-                            Class<?>[] methodParameterTypesforChar = new Class<?>[] {char.class, char.class};
-                            Object[] methodArgument = new Object[] {char1, char2};
-                            Character result = (Character) executeMethod(pluginClasses.get(operator2).getClassReference(),"calculateAsci", methodParameterTypesforChar, methodArgument);
-
-                            System.out.println("The result of opereation: " + input + " = " + result);
                         }
                     }
                 }
